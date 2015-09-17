@@ -1,4 +1,4 @@
 qw
 45
 ty
-veg
+nonveg
