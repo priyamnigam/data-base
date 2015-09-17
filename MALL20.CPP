@@ -1,0 +1,1116 @@
+#include<iostream.h>
+#include<conio.h>
+#include<graphics.h>
+#include<process.h>
+#include<dos.h>
+#include<string.h>
+#include<stdio.h>
+   FILE *mo;
+   FILE *fp;
+   class employee
+   {
+   char name[20];
+   int id;
+   char add[30];
+   int salary;
+   public:
+   void input();
+   void wrt();
+   int &retid(){return id;}
+   char* retnam(){return name;}
+   int &retsal(){return salary;}
+   char* retadd(){return add;}
+   };
+
+   class beg
+   {
+   public:
+  void begin();
+   };
+
+   class mouse
+   {
+    public:
+   void show_mouse()
+   {
+	i.x.ax=1;
+	int86(0x33,&i,&o);
+   }
+  void hide_mouse()
+{
+	i.x.ax=2;
+	int86(0x33,&i,&o);
+}
+void get_mouse_pos(int *x,int *y,int *button)
+{
+	i.x.ax=3;
+	int86(0x33,&i,&o);
+	*x=o.x.cx;
+	*y=o.x.dx;
+	*button=o.x.bx&1;}
+   };
+
+   class seat
+   {
+   int no;
+   int price;
+   int flag;
+   public:
+   seat()
+   {
+   flag=0;
+   }
+   void collectprice();
+   int &retno()
+   {
+   return no;
+   }
+   int &retprice()
+   {
+   return price;
+   }
+   int &retflag()
+   {
+   return flag;
+   }
+   void dis()
+   {}
+   };
+
+     mouse m;
+
+   class audi
+   {
+   seat st[8][5];
+   char mov[30];
+   public:
+   audi();
+   int assignseat(int);
+   void checktime();
+   void check(int,int);
+    void disp();
+    void upmov(int);
+   };
+
+   audi:: audi()
+   {
+   int i,j;
+   for(i=0;i<8;i++)
+   for(j=0;j<5;j++)
+   st[i][j].retflag()=0;
+   }
+
+	void audi::upmov(int i)
+	{
+	cin>>mov;
+	if(i==0)
+	fp=fopen("mov.txt","w");
+	else
+	fp=fopen("mov.txt","a");
+	fprintf(fp,"%s\n",mov);
+	fclose(fp);
+	}
+
+	void audi::disp()
+   {
+   int i,j;
+   for(i=0;i<8;i++)
+   for(j=0;j<5;j++)
+   st[i][j].dis();
+   }
+ FILE *jew,*cl,*fd,*ind;
+   class theatre
+   {
+   audi *a[4];
+   public:
+   theatre()
+   {
+   a[0]=new audi;
+   a[1]=new audi;
+   a[2]=new audi;
+   a[3]=new audi;
+   }
+   void addemployee();
+   int askmovie();
+   };
+
+  class shop;
+
+class mall
+{
+char name[20];
+char loc[20];
+int noshops;
+shop *s[20];
+int ne;
+theatre t;
+int revenue;
+employee *e[30];
+public:
+mall(){noshops=0;ne=0;}
+void delshop();
+void reademp();
+void disemp();
+void delemp();
+void fwrt();
+void upd();
+void input();
+void shopopt();
+void calrev();
+int ticket();
+void addshop();
+void operator+(shop &s);
+void operator+(employee &s);
+void addemp();
+void dispshop();
+void readshop();
+};
+
+FILE *as;
+
+void employee::input()
+{
+cout<<"ENTER ID\n";
+cin>>id;
+cout<<"ENTER NAME\n";
+cin>>name;
+cout<<"ENTER ADDRESS\n";
+cin>>add;
+cout<<"ENTER SALARY\n";
+cin>>salary;
+wrt();
+}
+
+  void mall::disemp()
+  {reademp();
+  for(int i=0;i<ne && e[i]!=NULL;i++)
+{  cout<<"EMPLOYEE ID :- "<<e[i]->retid()<<"\n";
+  cout<<"NAME :- "<<e[i]->retnam()<<"\n";
+  cout<<"ADDRESS :- "<<e[i]->retadd()<<"\n";
+  cout<<"SALARY :- "<<e[i]->retsal()<<"\n";
+ } }
+
+  void mall::reademp()
+	       {                  ne=0;
+as=fopen("as.txt","r");
+e[ne]=new employee();
+while(fscanf(as,"%d%s%s%d",&e[ne]->retid(),e[ne]->retnam(),e[ne]->retadd(),&e[ne]->retsal())!=EOF)
+{
+ne++;
+e[ne]=new employee();
+}     fclose(as);
+     }
+void employee::wrt()
+{
+as=fopen("as.txt","a");
+fprintf(as,"%d\n%s\n%s\n%d\n",id,name,add,salary);
+fclose(as);
+}
+
+void mall::operator+(employee &st)
+{
+e[ne]=&st;
+ne++;
+}
+void mall::addemp()
+{        employee *r;
+  r->input();
+  *this+*r;
+  }
+
+  void mall::delemp()
+  {
+  int id=0;
+  cout<<"Enter employee id to delete\n";
+  cin>>id;
+  for(int i=0;i<ne;i++)
+  {
+  if(e[i]->retid()==id)
+  e[i]=NULL;
+  }
+  as=fopen("as.txt","w");
+  fclose(as);
+   for(i=0;i<ne;i++)
+  {
+  if(e[i]!=NULL)
+  e[i]->wrt();
+  }
+	     }
+
+  class shop
+    {
+    protected:
+    char name[10];
+    int rent;
+    char brand[20];
+    public:
+    shop(){}
+    friend void mall::readshop();
+  void input();
+  virtual void stock(int a){};
+    virtual void display(){};
+    void uprent();
+    virtual void wrt(){};
+ void payrent();
+ virtual  int &retmen(){};
+   virtual int &retwom(){};
+     virtual int &retkid(){};
+      virtual int &retgold(){};
+  virtual int &retdia(){};
+       virtual int &retsil(){};
+       virtual char* rettype(){};
+	char* retname(){return name;}
+	int &retrent(){return rent;}
+	char* retbrand(){return brand;}
+	virtual void red(){};
+    void addemployee();
+    };
+
+   void mall::calrev()
+   {
+   revenue=0;
+   int y=0,mn;
+   for(int i=0;i<noshops;i++)
+   revenue=revenue+ s[i]->retrent();
+   cout<<"REVENUE AS RENT FROM SHOPS :- "<<revenue<<"\n";
+   mo=fopen("mo.txt","r");
+   while(fscanf(mo,"%d",&mn)!=EOF)
+   {
+   y=y+mn;
+   }
+   cout<<"REVENUE FROM CINEMAS :- "<<y<<"\n";
+   revenue+=y;
+   cout<<"TOTAL REVENUE :- "<<revenue<<"\n";
+   fclose(mo);
+   }
+
+ class jewellery:public shop
+ {
+   int goldstock;
+   int diastock;
+   int silstock;
+   public:
+   void wrt();
+   void red();
+   void stock(int a);
+   void display();
+    int &retgold(){return goldstock;}
+    int &retdia(){return diastock;}
+     int &retsil(){return silstock;}
+ };
+
+ class clothing:public shop
+ {
+ int menwear;
+ int womenwear;
+ int kidswear;
+ public:
+ void wrt();
+     int &retmen(){return menwear;}
+    int &retwom(){return womenwear;}
+     int &retkid(){return kidswear;}
+ void stock(int a);
+ void display();
+ };
+
+ class food:public shop
+ {
+ char type[30];
+ public:
+ void wrt();
+ void stock(int a);
+ void display();
+ char* rettype(){return type;}
+ };
+	 void mall::fwrt()
+	 {
+	 for(int i=0;i<noshops && s[noshops]!=NULL;i++)
+	 s[noshops]->wrt();
+	 }
+
+ void shop::input()
+ {
+ cout<<"Enter shop name\n";
+ cin>>name;
+ cout<<"Enter rent\n";
+ cin>>rent;
+ cout<<"Brand\n";
+ cin>>brand;
+ stock(0);
+   }
+
+   void jewellery::display()
+     {
+      cout<<"Shop name :- ";
+     cout<<name;
+   cout<<"\nRent :- ";
+  cout<<rent;
+ cout<<"\nBrand :- ";
+ cout<<brand;
+   cout<<"\nGold stock :- ";
+ cout<<goldstock;
+ cout<<"\nDiamond stock :- ";
+ cout<<diastock;
+ cout<<"\nSilver stock :- ";
+ cout<<silstock<<"\n\n";
+ }
+
+   void clothing::display()
+	   {
+       cout<<"Shop name :- ";
+ cout<<name;
+ cout<<"\nRent :- ";
+ cout<<rent;
+ cout<<"\nBrand :- ";
+ cout<<brand;
+   cout<<"\nStock for mens :- ";
+ cout<<menwear;
+ cout<<"\nStock for women :- ";
+ cout<<womenwear;
+ cout<<"\nStock for kids :- ";
+ cout<<kidswear<<"\n\n";
+ }
+
+   void food::display()
+     {
+      cout<<"Shop name :- ";
+    cout<<name;
+    cout<<"\nRent :- ";
+ cout<<rent;
+ cout<<"\nBrand :- ";
+ cout<<brand;
+   cout<<"\nType :- ";
+ cout<<type<<"\n\n";
+}
+
+	   void jewellery::stock(int a)
+	   {
+	      cout<<"Enter gold stock\n";
+ cin>>goldstock;
+ cout<<"Enter diamond stock\n";
+ cin>>diastock;
+ cout<<"Enter silver stock\n";
+ cin>>silstock;
+ if(a!=1)
+       wrt();
+ }
+      void jewellery::wrt()
+      {
+       ind=fopen("index.txt","a");
+jew=fopen("jew.txt","a");
+fprintf(jew,"%s\n%d\n%s\n%d\n%d\n%d\n",name,rent,brand,goldstock,diastock,silstock);
+fprintf(ind,"%d\n",1);
+fclose(ind);
+fclose(jew);
+}
+
+   void clothing::stock(int a)
+	   {
+  cout<<"Enter men wear stock\n";
+ cin>>menwear;
+ cout<<"Enter women stock\n";
+ cin>>womenwear;
+ cout<<"Enter children stock\n";
+ cin>>kidswear;
+ if(a!=1)
+	     wrt();
+ }
+
+ void clothing::wrt()
+ {
+  ind=fopen("index.txt","a");
+cl=fopen("cl.txt","a");
+fprintf(cl,"%s\n%d\n%s\n%d\n%d\n%d\n",name,rent,brand,menwear,womenwear,kidswear);
+fprintf(ind,"%d\n",2);
+fclose(ind);
+fclose(cl);
+	  }
+
+   void food::stock(int a)
+	   {
+	       cout<<"Enter type(veg non veg or both)\n";
+      cin>>type;
+      if(a!=1)
+    wrt();
+ }
+     void food::wrt()
+     {
+	ind=fopen("index.txt","a");
+fd=fopen("fd.txt","a");
+fprintf(fd,"%s\n%d\n%s\n%s\n",name,rent,brand,type);
+fprintf(ind,"%d\n",3);
+fclose(ind);
+fclose(fd);
+}
+
+seat *k[10];
+
+ void jewellery::red()
+ {
+   fscanf(jew,"%s%d%s%d%d%d",name,rent,brand,goldstock,diastock,silstock);
+   }
+
+ void mall::readshop()
+    {
+    int n;
+    ind=fopen("index.txt","r");
+    jew=fopen("jew.txt","r");
+     cl=fopen("cl.txt","r");
+     fd=fopen("fd.txt","r");
+ noshops=0;
+	    while(fscanf(ind,"%d",&n)!=EOF)
+ {
+    flushall();
+    if(n==1)
+    {
+    s[noshops]=new jewellery;
+   flushall();
+  fscanf(jew,"%s\n%d\n%s\n%d\n%d\n%d\n",s[noshops]->name,&s[noshops]->rent,s[noshops]->brand,&s[noshops]->retgold(),&s[noshops]->retdia(),&s[noshops]->retsil());
+noshops++;
+     cout<<s[noshops]->retname();
+    }
+     if(n==2)
+    {
+    s[noshops]=new clothing();
+      fscanf(cl,"%s%d%s%d%d%d",s[noshops]->name,&s[noshops]->rent,s[noshops]->brand,&s[noshops]->retmen(),&s[noshops]->retwom(),&s[noshops]->retkid());
+       noshops++;
+    }
+     if(n==3)
+    {                  flushall();
+    s[noshops]=new food;
+	  flushall();
+   fscanf(fd,"%s%d%s%s",s[noshops]->name,&s[noshops]->rent,s[noshops]->brand,s[noshops]->rettype());
+				  flushall();
+      cout<<s[noshops]->retname()<<"   "<<s[noshops]->retrent()<<"   "<<s[noshops]->rettype();
+    noshops++;
+    }
+    }
+    fclose(ind);
+    fclose(fd);
+    fclose(jew);
+    fclose(cl);
+    }
+
+void mall::dispshop()
+{
+for(int i=0;i<noshops;i++)
+{
+ if(s[i]!=NULL)
+s[i]->display();
+}
+}
+
+void mall::operator+(shop &st)
+{
+s[noshops]=&st;
+noshops++;
+}
+
+void mall::addshop()
+{
+shop *st;
+int ch;
+cout<<"Enter 1 for jewellery shop 2 for clothing 3 for food";
+cin>>ch;
+if(ch==1)
+st=new jewellery();
+if(ch==2)
+st=new clothing();
+if(ch==3)
+st=new food();
+st->input();
+*this+*st;
+  }
+
+  void mall::delshop()
+  {
+  char nm[20];
+  int i;
+  cout<<"ENTER NAME OF SHOP TO DELETE";
+  cin>>nm;
+  for(i=0;i<noshops;i++)
+  if(strcmp(nm,s[i]->retname())==0)
+  s[i]=NULL;
+   upd();
+  }
+
+  void mall::upd()
+  {
+   jew=fopen("jew.txt","w");
+  ind=fopen("index.txt","w");
+  cl=fopen("cl.txt","w");
+  fd=fopen("fd.txt","w");
+  fclose(jew);
+  fclose(ind);
+  fclose(fd);
+  fclose(cl);
+  for(int i=0;i<noshops && s[i]!=NULL;i++)
+  s[i]->wrt();
+  }
+
+ void mall::shopopt()
+	 {
+	  int i,x1,y1,br=1,but1,aa,f,c;
+	  setbkcolor(7);
+       cleardevice();
+			      f=1;
+			      m.show_mouse();
+ for(i=0;i<16||br==1;i++)
+ {
+	   delay(50);
+	m.hide_mouse();
+ setbkcolor(7);
+ setcolor(4);
+ rectangle(100,7,550,50);
+ setcolor(i);
+ if(kbhit())
+ {
+ br=0;
+ break;
+ }
+	      settextstyle(DEFAULT_FONT, HORIZ_DIR, 3);
+  outtextxy(153,15,"  INOX SHOPS   ");
+      setcolor(9); setfillstyle(SOLID_FILL,9);
+    rectangle(0,410,640,480);
+    floodfill(440,460,9);
+    setcolor(i);
+    setcolor(i);
+     setfillstyle(SOLID_FILL,WHITE);
+       settextstyle(DEFAULT_FONT,HORIZ_DIR,1);
+  rectangle(35,245-50,155,295-50);
+  bar(40,250-50,150,290-50);
+  outtextxy(60,220,"DISPLAY");
+   if(x1>=35 && x1<=155 && y1>=195 && y1<=245 && but1==1)
+   {
+   cleardevice();
+   setbkcolor(0);
+   dispshop();
+     getch();
+   clrscr();
+   cleardevice();
+   }
+ setcolor(2);
+  setcolor(i);
+  rectangle(255,315,375,365);
+  bar(260,370-50,370,410-50);
+  outtextxy(290,335,"ADD SHOP");
+   rectangle(255,95,375,145);
+  bar(260,100,370,140);
+  outtextxy(290,120,"UPDATE");
+     if(x1>=255 && x1<=375 && y1>=95 && y1<=145 && but1==1)
+   {
+   cleardevice();
+   setbkcolor(0);
+     for(int qq=0;qq<noshops;qq++)
+   {
+   cout<<"FOR SHOP  "<<s[qq]->retname()<<"\n";
+   s[qq]->stock(1);
+   }
+   upd();
+   cout<<"UPDATED SUCCESSFULLY";
+   getch();
+   clrscr();
+   cleardevice();
+   }
+   rectangle(485,195,605,245);
+   if(x1>=255 && x1<=375 && y1>=315 && y1<=365 && but1==1)
+   {
+   cleardevice();
+   setbkcolor(0);
+   addshop();
+   cout<<"INSERTED SUCCESSFULLY";
+   getch();
+   clrscr();
+   cleardevice();
+   }
+  bar(490,250-50,600,290-50);
+  outtextxy(500,220,"DELETE SHOP");
+  if(x1>=485 && x1<=605 && y1>=195 && y1<=245 && but1==1)
+   {
+   cleardevice();
+   setbkcolor(0);
+   delshop();
+   cout<<"SHOP DELETED";
+   getch();
+   clrscr();
+   cleardevice();
+   }
+  m.show_mouse();
+  m.get_mouse_pos(&x1,&y1,&but1);
+  }
+     cleardevice();
+	       }
+
+   void ff(float x1,float y1,float x2,float y2,int n)
+{
+if(n==0)
+return;
+bar(x1+(x2-x1)/3,y1+(y2-y1)/3,x1+(x2-x1)*(0.66),y1+(y2-y1)*(0.66));
+ff(x1,y1,x1+(x2-x1)/3,y1+(y2-y1)/3,n-1);
+ff(x1+(x2-x1)/3,y1,x1+(x2-x1)*(0.66),y1+(y2-y1)/3,n-1);
+ff(x1+(x2-x1)*(0.66),y1,x2,y1+(y2-y1)/3,n-1);
+ff(x1+(x2-x1)*(0.66),y1+(y2-y1)/3,x2,y1+(y2-y1)*(0.66),n-1);
+ff(x1+(x2-x1)*(0.66),y1+(y2-y1)*(0.66),x2,y2,n-1);
+ff(x1+(x2-x1)/3,y1+(y2-y1)*(0.66),x1+(x2-x1)*(0.66),y2,n-1);
+ff(x1,y1+(y2-y1)*(0.66),x1+(x2-x1)/3,y2,n-1);
+ff(x1,y1+(y2-y1)/3,x1+(x2-x1)/3,y1+(y2-y1)*(0.66),n-1);
+}
+
+void beg::begin()
+{            int i;
+  setcolor(4);
+ rectangle(100,7,550,50);
+   ff(150,10,200,50,3);
+  ff(450,10,500,50,3);
+    for(i=0;!kbhit() && i<50;i++)
+ {
+ setcolor(i);
+	      settextstyle(DEFAULT_FONT, HORIZ_DIR, 3);
+  outtextxy(125,15,"    INOX MALL   ");
+    setcolor(4);
+ settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+ outtextxy(290,80,"PRIYAM");
+ if(i==0)delay(300);
+ setcolor(11);
+   outtextxy(290,170,"AKASH");
+   if(i==0)
+   delay(300);
+   setcolor(5);
+   outtextxy(290,260,"AKRITI");
+   if(i==0)
+   delay(300);
+   setcolor(6);
+   outtextxy(290,350,"RUPALI");
+   if(i==0)
+   delay(300);
+   setcolor(1);
+   outtextxy(255,440,"PRODUCTIONS");
+   }
+   }
+
+   char nam[4][100];
+
+   void read()
+   {
+       for(int i=0;i<4;i++)
+		  {
+		  fscanf(fp,"%s",nam[i]);
+	  }}
+
+	 int mall::ticket()
+	 {
+	  int i,x1,y1,br=1,but1,aa,f,c;
+	  setbkcolor(7);
+       cleardevice();
+		  fp=fopen("mov.txt","r");
+			read();
+			 fclose(fp);
+			      f=1;
+ for(i=0;i<16||br==1;i++)
+ {
+	   delay(50);
+	   fp=fopen("mov.txt","r");
+	   read();
+	   fclose(fp);
+	m.hide_mouse();
+ setbkcolor(7);
+ setcolor(4);
+ rectangle(100,7,550,50);
+  ff(120,10,170,50,3);
+  ff(480,10,530,50,3);
+ setcolor(i);
+	      settextstyle(DEFAULT_FONT, HORIZ_DIR, 3);
+  outtextxy(153,15," INOX CINEMAS  ");
+      setcolor(9); setfillstyle(SOLID_FILL,9);
+    rectangle(0,410,640,480);
+    floodfill(440,460,9);
+    setcolor(i);
+    setcolor(i);
+     setfillstyle(SOLID_FILL,WHITE);
+       settextstyle(DEFAULT_FONT,HORIZ_DIR,1);
+  rectangle(35,245-50,155,295-50);
+  bar(40,250-50,150,290-50);
+  outtextxy(60,220,nam[0]);
+ setcolor(2);
+  setcolor(i);
+  rectangle(185,245-50,305,295-50);
+  bar(190,250-50,300,290-50);
+  outtextxy(200,220,nam[1]);
+  rectangle(335,245-50,455,295-50);
+  bar(340,250-50,450,290-50);
+ outtextxy(350,220,nam[2]);
+  rectangle(485,245-50,605,295-50);
+  bar(490,250-50,600,290-50);
+  outtextxy(500,220,nam[3]);
+       rectangle(255,415-100,375,465-100);
+  bar(260,370-50,370,410-50);
+  outtextxy(290,335,"UPDATE");
+  m.show_mouse();
+  m.get_mouse_pos(&x1,&y1,&but1);
+  if(kbhit())
+ {
+ br=0;
+ break;
+ }
+  if(but1==1)
+   aa=t.askmovie();
+   }
+     cleardevice();
+       return 0;
+	       }
+
+		 int ncs;
+
+	     int theatre::askmovie()
+	      {
+	      m.show_mouse();
+	      int but1=0,x1,y1,i,h=0,aa,c;
+		ncs=0;
+	      while(but1==0 && h==0 )
+	      {
+	      m.get_mouse_pos(&x1,&y1,&but1);
+	      if(x1>=40 && x1<=150 && y1>=200 && y1<=240 && but1==1){//cleardevice();
+	      h=1;
+	     aa=a[0]->assignseat(1);
+		 }
+	       if(x1>=190 && x1<=240 && y1>=200 && y1<=240 && but1==1)
+			    {
+	      a[1]->assignseat(2);
+	       h=1;
+		  }
+	     if(x1>=340 && x1<=450 && y1>=200 && y1<=240 && but1==1)   {//cleardevice();
+	      a[2]->assignseat(3);
+	      h=1;
+		 }
+	      if(x1>=490 && x1<=600 && y1>=200 && y1<=240 && but1==1)                  {cleardevice();
+	      a[3]->assignseat(4);
+		h=1;
+		 }
+		   rectangle(255,415-100,375,465-100);
+		   if(x1>=255 && x1<=375 && y1>=315 && y1<=365 && but1==1)
+		   {
+		      cleardevice();
+		   m.hide_mouse();
+		   clrscr();
+		       cleardevice();
+		   setbkcolor(0);
+		   cout<<"ENTER NAME OF MOVIES\n";
+		  for(i=0;i<4;i++)
+		   a[i]->upmov(i);
+			       }
+				}
+	       cleardevice();
+	       m.show_mouse();
+	       return 0;
+		}
+
+		   int mm=0,zz=0,xx=0,cc=0;
+
+		void audi::check(int x,int y)
+		     {
+		       int w=0,i,j,c=1,l,b,d,v=0,f=-1,s=-1;
+	       for(i=0;i<8;i++)
+	       {
+	       for(j=0;j<5;j++)
+	       {
+	       if(st[i][j].retflag()!=1)
+	       if(x>=40+i*70 && y>=30+j*30+w && x<=100+i*70 && y<=70+j*30+w)
+	       {
+	       setcolor(4);
+	       if(v==0)
+	       {
+	       rectangle(40+i*70,30+j*30+w,100+i*70,70+j*30+w);
+	       l=40+i*70;
+	       b=30+j*30+w;
+	       c=100+i*70;
+	       d=70+j*30+w;
+		v=1;
+	       }
+	      if(zz==0)
+	      {
+	      mm=1;
+	      zz=1;
+	      }
+	       if((mm==1)&&(l==(40+i*70))&&(b==(30+j*30+w) )&&(c==(100+i*70))&&(d==(70+j*30+w)))
+	       {
+	       st[i][j].retflag()=1;
+	       st[i][j].retno()=c;
+			 c++;
+		if(xx==0)
+	     {
+	       mm=0;
+	       zz=0;
+	       xx=1;
+	       cc=0;
+	      }
+	       v=1;
+		   if(st[i][j].retflag()==1)
+	       {
+	       k[ncs]=&st[i][j];
+		ncs=ncs+1;
+		}
+		     }
+	       if(j>=0 && j<=1)
+	       st[i][j].retprice()=120;
+	       if(j==2 || j==3)
+	       st[i][j].retprice()=100;
+	       if(j==4)
+	       st[i][j].retprice()=80;
+	       setcolor(5);
+	       }
+	       w=w+40;
+	       }
+		 w=0;
+			}
+}
+
+		int cancel()
+			{
+			int i;
+			for(i=0;i<10;i++)
+			{
+			k[i]->retflag()=0;
+			  }
+			 return 0;
+			}
+
+	 int  book()
+	 {
+	   clrscr();
+	 int i,price=0;
+	 for(i=0;i<ncs;i++)
+	 price=price+k[i]->retprice();
+	 cleardevice();
+	 cout<<"PAY Rs:-"<<price<<"\n";
+	      getch();
+	      mo=fopen("mo.txt","a");
+	      fprintf(mo,"%d\n",price);
+	      fclose(mo);
+	 cout<<"SEATS BOOKED\n";
+	getch();
+	return 0;
+	 }
+
+	 void rec(int i,int j,int w)
+	 {	settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+		if(j==0)
+	       outtextxy(60+i*70,45+j*30+w,"A");
+	       if(j==1)
+	       outtextxy(60+i*70,45+j*30+w,"B");
+		if(j==2)
+	       outtextxy(60+i*70,45+j*30+w,"C");
+	       if(j==3)
+	       outtextxy(60+i*70,45+j*30+w,"D");
+	       if(j==4)
+	       outtextxy(60+i*70,45+j*30+w,"E");
+			if(i==0)
+	       outtextxy(68+i*70,45+j*30+w,"1");
+	       if(i==1)
+	       outtextxy(68+i*70,45+j*30+w,"2");
+		if(i==2)
+	       outtextxy(68+i*70,45+j*30+w,"3");
+	       if(i==3)
+	       outtextxy(68+i*70,45+j*30+w,"4");
+	       if(i==4)
+	       outtextxy(68+i*70,45+j*30+w,"5");
+			if(i==5)
+	       outtextxy(68+i*70,45+j*30+w,"6");
+	       if(i==6)
+	       outtextxy(68+i*70,45+j*30+w,"7");
+	       if(i==7)
+	       outtextxy(68+i*70,45+j*30+w,"8");
+
+	 }
+
+	       int audi::assignseat(int p)
+	       {
+	       int q=0,i,j,w=0,x1,y1,but1,c=0,a,v;
+	       char con[3];
+	       m.hide_mouse();
+	       cleardevice();
+	       setbkcolor(0);
+		  for(i=0;i<10;i++)
+		 k[i]=NULL;
+	       for(i=0;i<8;i++)
+	       {
+	       for(j=0;j<5;j++)
+	       {
+	       a=st[i][j].retflag();
+	       if(a==0)
+	       {setcolor(5);
+	       rec(i,j,w);
+	       rectangle(40+i*70,30+j*30+w,100+i*70,70+j*30+w);
+		}
+	       else
+	       if(a==1)
+	       {
+	       setcolor(4);
+		rec(i,j,w);
+		 rectangle(40+i*70,30+j*30+w,100+i*70,70+j*30+w);
+		 }
+	       w=w+40;
+	       }
+	       w=0;
+	}
+	       settextstyle(DEFAULT_FONT, HORIZ_DIR, 4);
+	       if(p==1)
+		outtextxy(240,400,"AUDI-1");
+		if(p==2)
+		outtextxy(240,400,"AUDI-2");
+		if(p==3)
+		outtextxy(240,400,"AUDI-3");
+		if(p==4)
+		outtextxy(240,400,"AUDI-4");
+		rectangle(30,430,100,470);
+		rectangle(540,430,610,470);
+		settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
+		outtextxy(40,445,"CANCEL");
+		outtextxy(560,445,"BOOK");
+		m.show_mouse();
+
+	     ll:
+	      v=1;
+		but1=0;
+	       while(q==0)
+	       {
+	       m.get_mouse_pos(&x1,&y1,&but1);
+	       if(but1==1&&v==1)
+	      {
+
+	      if(v==1)
+	      {
+	       v=0;
+	      check(x1,y1); }
+}
+xx=0;
+if(but1==1 && x1>=560 && x1<=610 && y1>=430 && y1<=470)
+{
+book();
+cleardevice();
+return 0;
+}
+if(but1==1 && x1>=30 && x1<=100 && y1>=430 && y1<=470)
+{
+cancel();
+q=1;
+cleardevice();
+return 0;
+}
+but1=0;
+goto ll;
+		}
+}
+
+	   int global=1;
+
+ void main(void)
+{
+   flushall();
+   mall ml;
+   employee *e=new employee();
+ ml.readshop();
+ml.reademp();
+ int br=1;
+    int gdriver = DETECT, gmode, errorcode;
+      int x1,y1,but1;
+   initgraph(&gdriver, &gmode, "");
+ errorcode = graphresult();
+   if (errorcode != grOk)
+   {
+      cout<<"Graphics error\n"<< grapherrormsg(errorcode);
+      cout<<"Press any key to halt:";
+      getch();
+      exit(1);
+   }
+// #######################################################################
+   //mainpage
+      int i,mj=0,cho;
+      beg bg;
+      setbkcolor(7);
+      if(global==1)
+      bg.begin();
+      global=0;
+       cleardevice();
+ for(i=0;i<16||br==1;i++)
+ {
+  delay(50);
+  setbkcolor(7);
+  setcolor(4);
+ rectangle(100,7,550,50);
+  ff(150,10,200,50,3);
+  ff(450,10,500,50,3);
+ setcolor(i);
+ if(kbhit())
+ br=0;
+    settextstyle(DEFAULT_FONT, HORIZ_DIR, 3);
+  outtextxy(125,15,"    INOX MALL   ");
+    setcolor(9); setfillstyle(SOLID_FILL,9);
+    rectangle(0,410,640,480);
+    floodfill(440,460,9);
+    setcolor(i);
+    outtextxy(130,430,"!!!  WELCOME  !!!");
+    setcolor(i);  setfillstyle(SOLID_FILL,WHITE);
+  rectangle(35,145,155,195);
+  bar(40,150,150,190);
+  settextstyle(DEFAULT_FONT,HORIZ_DIR,1);
+  setcolor(i);
+  outtextxy(50,165,"MOVIES");
+  setcolor(i);
+  rectangle(185,145,305,195);
+  bar(190,150,300,190);
+  outtextxy(200,165,"SHOPS");
+  rectangle(335,145,455,195);
+  bar(340,150,450,190);
+  outtextxy(350,165,"REVENUE");
+  if(x1>=335&&x1<=455&&y1>=145&&y1<=195&&but1==1)
+    {
+   cleardevice();
+   setbkcolor(0);
+      ml.calrev();
+     getch();
+   clrscr();
+   cleardevice();
+    }
+  rectangle(485,145,605,195);
+  bar(490,150,600,190);
+  outtextxy(500,165,"EMPLOYEE");
+  if(x1>=485 && x1<=605 && y1>=145&&y1<=195&&but1==1)
+    {
+   cleardevice();
+   setbkcolor(0);
+	      cout<<"ENTER 1 TO DISPLAY 2 TO ADD 3 TO DELETE";
+	      cin>>cho;
+	      if(cho==2)
+	      {
+      e->input();
+     ml+*e;    }
+     if(cho==3)
+     ml.delemp();
+     if(cho==1)
+     ml.disemp();
+     getch();
+   clrscr();
+   cleardevice();
+    }
+  m.show_mouse();
+  m.get_mouse_pos(&x1,&y1,&but1);
+  if(but1==1)
+  m.hide_mouse();
+    if(x1>=40&&x1<=150&&y1>=150&&y1<=190&&but1==1)
+    {
+  cleardevice();
+  ml.ticket();
+  getch();
+     }
+      if(x1>=190&&x1<=300&&y1>=150&&y1<=190&&but1==1)
+    {
+  cleardevice();
+  ml.shopopt();
+    ml.fwrt();
+    getch();
+     }
+      }
+     getch();
+    closegraph();
+     }
+
